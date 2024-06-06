@@ -17,3 +17,30 @@ Constraints:
 1 <= hand.length <= 104
 0 <= hand[i] <= 109
 1 <= groupSize <= hand.length
+
+
+Solution:
+
+class Solution {
+    public boolean isNStraightHand(int[] hand, int groupSize) {
+        if (hand.length % groupSize != 0)
+            return false;
+        TreeMap<Integer, Integer> freqMap = new TreeMap<>();
+        for (int card : hand) {
+            freqMap.put(card, freqMap.getOrDefault(card, 0) + 1);
+        }
+        while (!freqMap.isEmpty()) {
+            int firstKey = freqMap.firstKey();
+            for (int i = firstKey; i < firstKey + groupSize; i++) {
+                if (!freqMap.containsKey(i))
+                    return false;
+                int count = freqMap.get(i);
+                if (count == 1)
+                    freqMap.remove(i);
+                else
+                    freqMap.put(i, count - 1);
+            }
+        }
+        return true;
+    }
+}
